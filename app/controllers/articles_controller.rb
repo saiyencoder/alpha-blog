@@ -16,7 +16,7 @@ class ArticlesController < ApplicationController
 
   def create
     @article = Article.new(article_params)
-    # When creating a 
+    # When creating a new article, the current user logged in will be saved as the user.
     @article.user = current_user
     if @article.save
       flash[:success] = "Article was successfully created"
@@ -54,7 +54,7 @@ class ArticlesController < ApplicationController
   end
 
   def require_same_user
-    if current_user != @article.user
+    if current_user != @article.user and !current_user.admin?
       flash[:danger] = "You can only edit or delete your own article"
       redirect_to root_path
     end
